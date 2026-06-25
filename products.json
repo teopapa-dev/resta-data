@@ -1,10 +1,22 @@
-{
-  "iphone 16": {
-    "price": "799€",
-    "link": "https://linkwise.net/your-affiliate-link-for-iphone"
+[
+  {
+    "name": "Apple iPhone 15 Pro 128GB (Public)",
+    "price": "1049€",
+    "link": "https://www.public.gr/product/apple-iphone-15-pro"
   },
-  "playstation 5": {
-    "price": "410€",
-    "link": "https://linkwise.net/your-affiliate-link-for-ps5"
+  {
+    "name": "Sony PlayStation 5 Slim (Public)",
+    "price": "479€",
+    "link": "https://www.public.gr/product/sony-playstation-5"
+  },
+  {
+    "name": "Apple iPhone 15 Pro 128GB (Plaisio)",
+    "price": "1029€",
+    "link": "https://www.plaisio.gr/apple-iphone-15-pro"
+  },
+  {
+    "name": "Sony PlayStation 5 Slim (Plaisio)",
+    "price": "469€",
+    "link": "https://www.plaisio.gr/sony-playstation-5"
   }
-}
+]
