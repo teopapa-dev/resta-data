@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resta - Αναζήτηση Προσφορών</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-color: #ffffff;
+            --accent-color: #ff5a00;
+            --input-bg: #2d2d2d;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: var(--accent-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 2px solid #333;
+            border-radius: 30px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        .search-box:focus {
+            border-color: var(--accent-color);
+        }
+
+        .results-container {
+            margin-top: 30px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: left;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-info h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.2rem;
+        }
+
+        .product-info .price {
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .buy-btn {
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+
+        .buy-btn:hover {
+            opacity: 0.9;
+        }
+
+        .no-results {
+            color: #666;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Resta 🪙</h1>
+        <p>Βρες την καλύτερη τιμή πριν αγοράσεις</p>
+        
+        <!-- Μπάρα Αναζήτησης -->
+        <input type="text" id="searchBar" class="search-box" placeholder="Γράψε το προϊόν που ψάχνεις (π.χ. iPhone)...">
+        
+        <!-- Εδώ θα εμφανίζονται τα αποτελέσματα -->
+        <div id="results" class="results-container"></div>
+    </div>
+
+    <script>
+        // ΕΔΩ ΒΑΖΕΙΣ ΤΟ LIVE LINK ΑΠΟ ΤΟ GITHUB ΣΟΥ (Όπως κάναμε στο extension)
+        const JSON_URL = "https://raw.githubusercontent.com/teopapa-dev/resta-data/main/products.json";
+        
+        let productsDatabase = [];
+
+        // Φόρτωση των δεδομένων από το GitHub κατά την εκκίνηση
+        async function loadProducts() {
+            try {
+                // Σπάμε το cache για να τραβάει πάντα τα φρέσκα δεδομένα
+                const response = await fetch(`${JSON_URL}?t=${Date.now()}`);
+                productsDatabase = await response.json();
+                console.log("Η βάση δεδομένων φορτώθηκε!", productsDatabase);
+            } catch (error) {
+                console.error("Σφάλμα κατά τη φόρτωση των προϊόντων:", error);
+            }
+        }
+
+        // Λειτουργία Αναζήτησης
+        function searchProducts(query) {
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = ""; // Καθαρισμός προηγούμενων αποτελεσμάτων
+
+            if (!query.trim()) return;
+
+            // Φιλτράρισμα με βάση το τι έγραψε ο χρήστης
+            const filtered = productsDatabase.filter(product => 
+                product.name.toLowerCase().includes(query.toLowerCase())
+            );
+
+            if (filtered.length === 0) {
+                resultsDiv.innerHTML = "<p class='no-results'>Δεν βρέθηκαν προϊόντα με αυτό το όνομα.</p>";
+                return;
+            }
+
+            // Εμφάνιση των προϊόντων σε κάρτες
+            filtered.forEach(product => {
+                const card = document.createElement("div");
+                card.className = "product-card";
+                card.innerHTML = `
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <div class="price">${product.price}</div>
+                    </div>
+                    <a href="${product.link}" target="_blank" class="buy-btn">Δες το Deal</a>
+                `;
+                resultsDiv.appendChild(card);
+            });
+        }
+
+        // Event Listener για όταν ο χρήστης πληκτρολογεί
+        document.getElementById("searchBar").addEventListener("input", (e) => {
+            searchProducts(e.target.value);
+        });
+
+        // Εκκίνηση
+        loadProducts();
+    </script>
+
+</body>
+</html>
