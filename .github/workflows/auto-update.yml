@@ -1,0 +1,29 @@
+name: Auto Price Updater
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # Αυτό σημαίνει "Κάθε βράδυ στις 12:00"
+  workflow_dispatch: # Αυτό σου επιτρέπει να το τρέχεις και χειροκίνητα με ένα κουμπί
+
+jobs:
+  update-prices:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/node-v@v3
+      with:
+        node-version: '18'
+
+    - name: Run Updater Script
+      run: node updater.js
+
+    - name: Commit and Push changes
+      run: |
+        git config --global user.name 'Resta Bot'
+        git config --global user.email 'bot@resta.app'
+        git add products.json
+        git commit -m "🤖 Auto-updated products database" || exit 0
+        git push
