@@ -1,13 +1,12 @@
 const fs = require('fs');
 
-// Προσομοίωση δεδομένων με εικόνες, badges και καταστήματα
 const STORES_DATA = [
     {
         name: "Apple iPhone 15 Pro 128GB",
         store: "Public",
         price: "1.049 €",
         badge: "🔥 Hot Deal",
-        image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=200&q=80",
+        image: "https://picsum.photos/id/160/200/200", // Σταθερή εικόνα κινητού/gadget
         link: "https://www.public.gr"
     },
     {
@@ -15,7 +14,7 @@ const STORES_DATA = [
         store: "Plaisio",
         price: "1.029 €",
         badge: "⚡ Best Price",
-        image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=200&q=80",
+        image: "https://picsum.photos/id/160/200/200",
         link: "https://www.plaisio.gr"
     },
     {
@@ -23,7 +22,7 @@ const STORES_DATA = [
         store: "Public",
         price: "449 €",
         badge: "✨ Προσφορά",
-        image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=200&q=80",
+        image: "https://picsum.photos/id/96/200/200", // Σταθερή εικόνα τεχνολογίας
         link: "https://www.public.gr"
     },
     {
@@ -31,7 +30,7 @@ const STORES_DATA = [
         store: "Plaisio",
         price: "439 €",
         badge: "⚡ Best Price",
-        image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=200&q=80",
+        image: "https://picsum.photos/id/96/200/200",
         link: "https://www.plaisio.gr"
     }
 ];
