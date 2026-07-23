@@ -1,38 +1,44 @@
 const fs = require('fs');
 
-// 1. Εδώ ορίζουμε τα "Feeds" των καταστημάτων. 
-// Στο μέλλον θα βάλεις τα επίσημα Affiliate XML links της Linkwise.
-// Για το παράδειγμα, φτιάχνουμε μια προσομοίωση για Public & Πλαίσιο.
-const STORES_DATA = {
-    "Public": [
-        { name: "Apple iPhone 15 Pro 128GB", price: "1049€", link: "https://www.public.gr/product/apple-iphone-15-pro" },
-        { name: "Sony PlayStation 5 Slim", price: "479€", link: "https://www.public.gr/product/sony-playstation-5" }
-    ],
-    "Plaisio": [
-        { name: "Apple iPhone 15 Pro 128GB", price: "1029€", link: "https://www.plaisio.gr/apple-iphone-15-pro" },
-        { name: "Sony PlayStation 5 Slim", price: "469€", link: "https://www.plaisio.gr/sony-playstation-5" }
-    ]
-};
-
-// 2. Συνάρτηση που μαζεύει όλα τα προϊόντα σε μια ενιαία λίστα
-function generateUnifiedDatabase() {
-    let finalProductsList = [];
-
-    // Διαβάζουμε κάθε κατάστημα και παίρνουμε τα προϊόντα του
-    for (const [storeName, products] of Object.entries(STORES_DATA)) {
-        products.forEach(item => {
-            finalProductsList.push({
-                name: `${item.name} (${storeName})`, // Προσθέτουμε το όνομα του καταστήματος στον τίτλο
-                price: item.price,
-                link: item.link // Εδώ στο μέλλον θα μπαίνει αυτόματα το affiliate tracking link
-            });
-        });
+// Προσομοίωση δεδομένων με εικόνες, badges και καταστήματα
+const STORES_DATA = [
+    {
+        name: "Apple iPhone 15 Pro 128GB",
+        store: "Public",
+        price: "1.049 €",
+        badge: "🔥 Hot Deal",
+        image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=200&q=80",
+        link: "https://www.public.gr"
+    },
+    {
+        name: "Apple iPhone 15 Pro 128GB",
+        store: "Plaisio",
+        price: "1.029 €",
+        badge: "⚡ Best Price",
+        image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&w=200&q=80",
+        link: "https://www.plaisio.gr"
+    },
+    {
+        name: "Sony PlayStation 5 Slim Digital",
+        store: "Public",
+        price: "449 €",
+        badge: "✨ Προσφορά",
+        image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=200&q=80",
+        link: "https://www.public.gr"
+    },
+    {
+        name: "Sony PlayStation 5 Slim Digital",
+        store: "Plaisio",
+        price: "439 €",
+        badge: "⚡ Best Price",
+        image: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?auto=format&fit=crop&w=200&q=80",
+        link: "https://www.plaisio.gr"
     }
+];
 
-    // 3. Αποθήκευση στο products.json
-    fs.writeFileSync('products.json', JSON.stringify(finalProductsList, null, 2));
-    console.log(`🤖 Η βάση δεδομένων ενημερώθηκε επιτυχώς με ${finalProductsList.length} προϊόντα!`);
+function generateUnifiedDatabase() {
+    fs.writeFileSync('products.json', JSON.stringify(STORES_DATA, null, 2));
+    console.log(`🤖 Η βάση δεδομένων ενημερώθηκε επιτυχώς με ${STORES_DATA.length} προϊόντα!`);
 }
 
-// Εκκίνηση της διαδικασίας
 generateUnifiedDatabase();
