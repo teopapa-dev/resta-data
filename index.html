@@ -3,183 +3,328 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Resta - Αναζήτηση Προσφορών</title>
+    <title>Resta — Βρες την καλύτερη τιμή</title>
+    <!-- Google Font (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-color: #121212;
-            --card-bg: #1e1e1e;
-            --text-color: #ffffff;
-            --accent-color: #ff5a00;
-            --input-bg: #2d2d2d;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --card-hover: #334155;
+            --accent: #f97316;
+            --accent-hover: #ea580c;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 20px;
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 20px 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        .container {
-            max-width: 600px;
-            width: 100%;
+        header {
             text-align: center;
-            margin-top: 50px;
+            margin-top: 20px;
+            margin-bottom: 28px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, #f97316, #fb923c);
+            color: #fff;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.4rem;
+            box-shadow: 0 4px 12px rgba(249, 115, 22, 0.3);
         }
 
         h1 {
-            color: var(--accent-color);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        p {
-            color: #aaa;
-            margin-bottom: 30px;
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
         }
 
-        .search-box {
+        /* Search Box */
+        .search-container {
             width: 100%;
-            padding: 15px;
-            font-size: 1.1rem;
-            border: 2px solid #333;
-            border-radius: 30px;
-            background-color: var(--input-bg);
-            color: var(--text-color);
+            max-width: 600px;
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px;
+            padding-left: 48px;
+            background-color: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            color: #fff;
+            font-size: 1rem;
             outline: none;
-            box-sizing: border-box;
-            transition: border-color 0.3s;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
 
-        .search-box:focus {
-            border-color: var(--accent-color);
+        .search-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.15);
         }
 
-        .results-container {
-            margin-top: 30px;
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        /* Quick Filters */
+        .quick-tags {
+            display: flex;
+            gap: 8px;
             width: 100%;
+            max-width: 600px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 24px;
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .quick-tags::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        .tag-btn {
+            background-color: var(--card-bg);
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .tag-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* Results List */
+        .results-container {
+            width: 100%;
+            max-width: 600px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 12px;
         }
 
         .product-card {
             background-color: var(--card-bg);
-            padding: 20px;
-            border-radius: 12px;
-            text-align: left;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 16px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-        }
-
-        .product-info h3 {
-            margin: 0 0 8px 0;
-            font-size: 1.2rem;
-        }
-
-        .product-info .price {
-            color: var(--accent-color);
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .buy-btn {
-            background-color: var(--accent-color);
-            color: white;
+            justify-content: space-between;
+            gap: 16px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: bold;
-            transition: opacity 0.2s;
+            color: inherit;
         }
 
-        .buy-btn:hover {
-            opacity: 0.9;
+        .product-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+            background-color: var(--card-hover);
+        }
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .price-tag {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .btn-deal {
+            background-color: var(--accent);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: background-color 0.2s ease;
+        }
+
+        .product-card:hover .btn-deal {
+            background-color: var(--accent-hover);
         }
 
         .no-results {
-            color: #666;
-            font-style: italic;
+            text-align: center;
+            color: var(--text-muted);
+            padding: 40px 20px;
+            font-size: 0.95rem;
+        }
+
+        footer {
+            margin-top: auto;
+            padding-top: 40px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            text-align: center;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Resta 🪙</h1>
-        <p>Βρες την καλύτερη τιμή πριν αγοράσεις</p>
-        
-        <!-- Μπάρα Αναζήτησης -->
-        <input type="text" id="searchBar" class="search-box" placeholder="Γράψε το προϊόν που ψάχνεις (π.χ. iPhone)...">
-        
-        <!-- Εδώ θα εμφανίζονται τα αποτελέσματα -->
-        <div id="results" class="results-container"></div>
+    <header>
+        <div class="logo-container">
+            <div class="logo-icon">R</div>
+            <h1>Resta</h1>
+        </div>
+        <p class="subtitle">Σύγκριση τιμών & προσφορές σε πραγματικό χρόνο</p>
+    </header>
+
+    <!-- Search Input -->
+    <div class="search-container">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="Ψάξε για προϊόν (π.χ. iPhone, PS5)...">
     </div>
 
-    <script>
-        // ΕΔΩ ΒΑΖΕΙΣ ΤΟ LIVE LINK ΑΠΟ ΤΟ GITHUB ΣΟΥ (Όπως κάναμε στο extension)
-        const JSON_URL = "https://raw.githubusercontent.com/teopapa-dev/resta-data/main/products.json";
-        
-        let productsDatabase = [];
+    <!-- Quick Filter Tags -->
+    <div class="quick-tags">
+        <button class="tag-btn" onclick="quickSearch('iPhone')">📱 iPhone</button>
+        <button class="tag-btn" onclick="quickSearch('PlayStation')">🎮 PS5</button>
+        <button class="tag-btn" onclick="quickSearch('Laptop')">💻 Laptops</button>
+    </div>
 
-        // Φόρτωση των δεδομένων από το GitHub κατά την εκκίνηση
-        async function loadProducts() {
+    <!-- Dynamic Results -->
+    <div id="results" class="results-container">
+        <!-- Τα αποτελέσματα θα φορτώνονται αυτόματα εδώ -->
+    </div>
+
+    <footer>
+        <p>© 2026 Resta Deals. Όλα τα δικαιώματα διατηρούνται.</p>
+    </footer>
+
+    <script>
+        let allProducts = [];
+
+        // Φόρτωση δεδομένων από το products.json
+        async function fetchProducts() {
             try {
-                // Σπάμε το cache για να τραβάει πάντα τα φρέσκα δεδομένα
-                const response = await fetch(`${JSON_URL}?t=${Date.now()}`);
-                productsDatabase = await response.json();
-                console.log("Η βάση δεδομένων φορτώθηκε!", productsDatabase);
+                const response = await fetch('products.json');
+                allProducts = await response.json();
+                displayProducts(allProducts);
             } catch (error) {
-                console.error("Σφάλμα κατά τη φόρτωση των προϊόντων:", error);
+                console.error('Σφάλμα κατά τη φόρτωση των προϊόντων:', error);
+                document.getElementById('results').innerHTML = '<div class="no-results">Αδυναμία φόρτωσης προϊόντων.</div>';
             }
         }
 
-        // Λειτουργία Αναζήτησης
-        function searchProducts(query) {
-            const resultsDiv = document.getElementById("results");
-            resultsDiv.innerHTML = ""; // Καθαρισμός προηγούμενων αποτελεσμάτων
+        // Εμφάνιση προϊόντων
+        function displayProducts(products) {
+            const container = document.getElementById('results');
+            container.innerHTML = '';
 
-            if (!query.trim()) return;
-
-            // Φιλτράρισμα με βάση το τι έγραψε ο χρήστης
-            const filtered = productsDatabase.filter(product => 
-                product.name.toLowerCase().includes(query.toLowerCase())
-            );
-
-            if (filtered.length === 0) {
-                resultsDiv.innerHTML = "<p class='no-results'>Δεν βρέθηκαν προϊόντα με αυτό το όνομα.</p>";
+            if (products.length === 0) {
+                container.innerHTML = '<div class="no-results">Δεν βρέθηκαν προϊόντα.</div>';
                 return;
             }
 
-            // Εμφάνιση των προϊόντων σε κάρτες
-            filtered.forEach(product => {
-                const card = document.createElement("div");
-                card.className = "product-card";
+            products.forEach(product => {
+                const card = document.createElement('a');
+                card.className = 'product-card';
+                card.href = product.link || '#';
+                card.target = '_blank';
+                card.rel = 'noopener noreferrer';
+
                 card.innerHTML = `
                     <div class="product-info">
-                        <h3>${product.name}</h3>
-                        <div class="price">${product.price}</div>
+                        <div class="product-title">${product.name}</div>
+                        <div class="price-tag">${product.price}</div>
                     </div>
-                    <a href="${product.link}" target="_blank" class="buy-btn">Δες το Deal</a>
+                    <div class="btn-deal">Δες το Deal</div>
                 `;
-                resultsDiv.appendChild(card);
+
+                container.appendChild(card);
             });
         }
 
-        // Event Listener για όταν ο χρήστης πληκτρολογεί
-        document.getElementById("searchBar").addEventListener("input", (e) => {
-            searchProducts(e.target.value);
+        // Live Search φιλτράρισμα
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const filtered = allProducts.filter(p => p.name.toLowerCase().includes(query));
+            displayProducts(filtered);
         });
 
-        // Εκκίνηση
-        loadProducts();
-    </script>
+        // Κουμπιά γρήγορης αναζήτησης
+        function quickSearch(keyword) {
+            const input = document.getElementById('searchInput');
+            input.value = keyword;
+            const filtered = allProducts.filter(p => p.name.toLowerCase().includes(keyword.toLowerCase()));
+            displayProducts(filtered);
+        }
 
+        // Αρχικοποίηση
+        fetchProducts();
+    </script>
 </body>
 </html>
