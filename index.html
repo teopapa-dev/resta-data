@@ -14,10 +14,29 @@
         }
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
         h1 {
             color: #ff6600;
+            margin-bottom: 5px;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        #search-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 25px;
+            border: 1px solid #334155;
+            background-color: #1e293b;
+            color: white;
+            outline: none;
+        }
+        #search-box::placeholder {
+            color: #94a3b8;
         }
         .container {
             max-width: 800px;
@@ -32,13 +51,22 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 15px;
+        }
+        .product-img {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            background-color: #ffffff;
+            border-radius: 6px;
+            padding: 4px;
+            flex-shrink: 0;
         }
         .product-info {
             flex-grow: 1;
-            padding-right: 15px;
         }
         .product-title {
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             margin-bottom: 8px;
             color: #f8fafc;
@@ -69,45 +97,67 @@
         <p>Οι καλύτερες προσφορές & ευκαιρίες της αγοράς</p>
     </header>
 
+    <div class="search-container">
+        <input type="text" id="search-box" placeholder="Ψάξε για προϊόν (π.χ. iPhone, Samsung, Case)..." onkeyup="filterProducts()">
+    </div>
+
     <div class="container" id="products-container">
         <p style="text-align: center;">Φόρτωση προσφορών...</p>
     </div>
 
     <script>
+        let allProducts = [];
+
         fetch('products.json')
             .then(response => response.json())
             .then(data => {
-                const container = document.getElementById('products-container');
-                container.innerHTML = '';
-
-                if (!data || data.length === 0) {
-                    container.innerHTML = '<p style="text-align: center;">Δεν βρέθηκαν προϊόντα αυτή τη στιγμή. Δοκιμάστε ξανά αργότερα!</p>';
-                    return;
-                }
-
-                data.forEach(product => {
-                    const card = document.createElement('div');
-                    card.className = 'product-card';
-
-                    const title = product.product_name || product.model_name || 'Προϊόν χωρίς όνομα';
-                    const price = product.price ? product.price + ' €' : '';
-                    const link = product.tracking_url || '#';
-
-                    card.innerHTML = `
-                        <div class="product-info">
-                            <div class="product-title">${title}</div>
-                            <div class="product-price">${price}</div>
-                        </div>
-                        <a href="${link}" class="btn-deal" target="_blank">Δες το Deal</a>
-                    `;
-
-                    container.appendChild(card);
-                });
+                allProducts = data || [];
+                displayProducts(allProducts);
             })
             .catch(error => {
                 console.error('Σφάλμα κατά τη φόρτωση των προϊόντων:', error);
                 document.getElementById('products-container').innerHTML = '<p style="text-align: center; color: red;">Σφάλμα φόρτωσης προϊόντων.</p>';
             });
+
+        function displayProducts(products) {
+            const container = document.getElementById('products-container');
+            container.innerHTML = '';
+
+            if (products.length === 0) {
+                container.innerHTML = '<p style="text-align: center;">Δεν βρέθηκαν προϊόντα.</p>';
+                return;
+            }
+
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+
+                const title = product.product_name || product.model_name || 'Προϊόν χωρίς όνομα';
+                const price = product.price ? product.price + ' €' : '';
+                const link = product.tracking_url || '#';
+                const image = product.thumb_url || product.image_url || 'https://via.placeholder.com/70';
+
+                card.innerHTML = `
+                    <img src="${image}" alt="${title}" class="product-img" onerror="this.src='https://via.placeholder.com/70'">
+                    <div class="product-info">
+                        <div class="product-title">${title}</div>
+                        <div class="product-price">${price}</div>
+                    </div>
+                    <a href="${link}" class="btn-deal" target="_blank">Δες το Deal</a>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function filterProducts() {
+            const searchText = document.getElementById('search-box').value.toLowerCase();
+            const filtered = allProducts.filter(product => {
+                const title = (product.product_name || product.model_name || '').toLowerCase();
+                return title.includes(searchText);
+            });
+            displayProducts(filtered);
+        }
     </script>
 
 </body>
